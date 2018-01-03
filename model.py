@@ -148,7 +148,8 @@ def TrainModel(epochs=100, load_model=None):
                 generated_soft_mask = unet(test_mixtures_var).data[0, 0, :, :]
                 print(generated_soft_mask.shape[1])
                 mask = np.vstack((np.zeros(generated_soft_mask.shape[1], dtype="float32"), generated_soft_mask))
-                util.SaveAudio("audio/vocal-%s-%s" % (test_mixture_filenames, epoch), test_mixtures[0]*mask, test_phases[0])
-                unet.save('model/unet_model-{}.pkl'.format(epoch + 1))
+                util.SaveAudio("audio/vocal-%s-%s.wav" % (test_mixture_filenames[0][:-10], epoch), test_mixtures[0][:,:]*mask, test_phases[0][:,:])
+                fname = 'model/unet_model-{}.pkl'.format(epoch + 1)
+                torch.save(unet.state_dict(), fname)
     print('Finished Training!')
     torch.save(unet.state_dict(), 'unet_model-fin.pkl')
