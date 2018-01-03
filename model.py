@@ -10,6 +10,7 @@ from torch import optim
 from torch.autograd import Variable
 from load_dataset import LoadDataset
 import const_nums as C
+import util
 
 
 class UNET(nn.Module):
@@ -112,7 +113,7 @@ def TrainModel(epochs=100, load_model=None):
 
     # test samples for generation
     test_mixture_filenames, test_mixtures, test_phases = data_loader.test_data(random_data_loader.batch_size)
-    test_mixtures_np = np.array(test_mixtures)[:, :512, :].reshape(num_test_audio, 1, 512, 128)
+    test_mixtures_np = np.array(test_mixtures)[:, :512, :].reshape(C.BATCH_SIZE, 1, 512, 128)
     test_mixtures_var = Variable(torch.from_numpy(test_mixtures_np)).cuda()
     print('Test samples loaded')
 
